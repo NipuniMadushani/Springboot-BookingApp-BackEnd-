@@ -1,5 +1,6 @@
 package com.dmsswt.BookingOrderService.serviceImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class BookingOrderServiceImpl implements BookingOrderService {
 	public void deleteById(Integer id) {
 		bookingOrderRepository.deleteById(id);
 		
+	}
+
+	@Override
+	public List<BookingOrder> findAll() {
+		return bookingOrderRepository.findAll();
 	}
 
 }

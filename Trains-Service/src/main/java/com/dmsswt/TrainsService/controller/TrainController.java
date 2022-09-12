@@ -14,21 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dmsswt.TrainsService.model.StationDetails;
 import com.dmsswt.TrainsService.model.Train;
+import com.dmsswt.TrainsService.service.StationService;
 import com.dmsswt.TrainsService.service.TrainService;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/trains")
+@RequestMapping("/api/trains")
 public class TrainController {
 	
 	@Autowired
 	private TrainService trainService;
 	
-	@PostMapping("/addTrain")
+	@Autowired
+	private StationService stationService;
+	
+	@PostMapping("/train")
 	public String saveTrain(@RequestBody Train train) {
 	trainService.saveTrain(train);
-	return "Added train with id :  " + train.getTrainid();
+	return "Added train with id :  " + train.getTrainId();
 	}
 	
 	@GetMapping("{trainid}")
@@ -37,28 +42,34 @@ public class TrainController {
 	}
 	
 	
-	@DeleteMapping("/delete/{trainid}")
+	@DeleteMapping("/{trainid}")
 	public String deleteTrain (@PathVariable Integer trainid) {
 		trainService.deleteById(trainid);
 		return "Train deleted with id : "+trainid;
     }
 	
-	@PutMapping("/update/{trainid}")
+	@PutMapping("/{trainid}")
 	public Train updateTrain(@PathVariable("trainid") Integer trainid,@RequestBody Train t ) {
-		t.setTrainid(trainid);
+		t.setTrainId(trainid);
 		trainService.saveTrain(t);
 		return t;
 		
 }
 	
-	 @GetMapping("/findAllTrains")
+	 @GetMapping("/trains")
 	    public List<Train> getTrains(){
 		return trainService.findAll();
 		
 	}
-	    @GetMapping("/findAllTrains/{trainid}")
+	    @GetMapping("/allTrains/{trainid}")
 	    public Optional<Train> getTrains(@PathVariable Integer trainid){
 		return trainService.findById(trainid);
+	}
+	    
+	    @GetMapping("/allStations")
+	    public List<StationDetails> getStations(){
+		return stationService.findAllStations();
+		
 	}
 
 }

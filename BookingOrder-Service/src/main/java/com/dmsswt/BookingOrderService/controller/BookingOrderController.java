@@ -2,6 +2,8 @@ package com.dmsswt.BookingOrderService.controller;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,18 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dmsswt.BookingOrderService.model.BookingOrder;
 import com.dmsswt.BookingOrderService.service.BookingOrderService;
+import java.util.List;
+
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping("/orders")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/api/booking")
 
 public class BookingOrderController {
 	
 	@Autowired
 	private BookingOrderService bookingOrderService;
 
-	@PostMapping("/addOrder")
-	public String saveBook(@RequestBody BookingOrder bookingOrder) {
+	@PostMapping("/ticket")
+	public String saveBook(@Valid @RequestBody BookingOrder bookingOrder) {
+		System.out.println("Done mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ");
 		bookingOrderService.saveBookingDetails(bookingOrder);
 	return "Booked ticket with id :  " + bookingOrder.getId();
     }
@@ -36,7 +41,12 @@ public class BookingOrderController {
 		return bookingOrderService.findById(id);
 	}
 	
-	@PutMapping("/update/{id}")
+	@GetMapping("/")
+	public List<BookingOrder> getBookingDetails(){
+		return bookingOrderService.findAll();
+	}
+	
+	@PutMapping("/{id}")
 	public BookingOrder updateOrder(@PathVariable("id") Integer id,@RequestBody BookingOrder order ) {
 		order.setId(id);
 		bookingOrderService.saveBookingDetails(order);
@@ -44,7 +54,7 @@ public class BookingOrderController {
 	}
 	
 	
-	 @DeleteMapping("/del/{id}")
+	 @DeleteMapping("/{id}")
 	 public String deleteOrder (@PathVariable Integer id) {
 	  bookingOrderService.deleteById(id);
 		return "Order deleted with id : "+id;
